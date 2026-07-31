@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Quick Sticky Notes for Odoo 19</title>
+    <style>
+        :root {
+            --ink: #1f2430;
+            --muted: #5b6475;
+            --paper: #fffdf8;
+            --panel: #ffffff;
+            --line: #e7e1d4;
+            --accent: #c9a227;
+            --accent-deep: #8a6d12;
+            --soft: #fff3c4;
+            --blue: #3d7ea6;
+            --green: #3f8f6b;
+            --shadow: 0 12px 32px rgba(31, 36, 48, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top right, rgba(201, 162, 39, 0.12), transparent 28%),
+                linear-gradient(180deg, #f7f4ec 0%, #ffffff 40%, #f7f4ec 100%);
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 28px 18px 60px;
+        }
+        .hero {
+            background: linear-gradient(135deg, #2b3142 0%, #3d465c 55%, #5a4a1f 100%);
+            color: #fff;
+            border-radius: 22px;
+            padding: 36px 32px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            right: -40px;
+            top: -40px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255, 215, 110, 0.16);
+        }
+        .eyebrow {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: clamp(30px, 4vw, 44px);
+            line-height: 1.15;
+        }
+        .hero p {
+            margin: 0;
+            max-width: 720px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+        }
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+        .badge {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+        .section {
+            margin-top: 34px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+        .section h2 {
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+        .section .lead {
+            color: var(--muted);
+            margin: 0 0 22px;
+            font-size: 16px;
+        }
+        .shot {
+            display: block;
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid var(--line);
+            box-shadow: 0 8px 24px rgba(31, 36, 48, 0.08);
+            background: #f3f1ea;
+        }
+        .caption {
+            margin: 10px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+        .grid-3, .grid-2 {
+            display: grid;
+            gap: 18px;
+        }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-2 { grid-template-columns: 1.1fr 0.9fr; align-items: center; }
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 18px;
+        }
+        .card h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+        .card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        .note-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        .list {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+        }
+        .list li { margin: 8px 0; }
+        .steps {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .steps li {
+            counter-increment: step;
+            position: relative;
+            padding: 14px 14px 14px 58px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            background: var(--paper);
+        }
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 14px;
+            top: 14px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--soft);
+            color: var(--accent-deep);
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+        }
+        .feature-row {
+            display: grid;
+            grid-template-columns: 28px 1fr;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--line);
+        }
+        .feature-row:last-child { border-bottom: 0; }
+        .check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #e7f7ee;
+            color: var(--green);
+            display: grid;
+            place-items: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .tech span {
+            background: #f3f5f9;
+            border: 1px solid #dfe4ee;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #334155;
+        }
+        .footer {
+            margin-top: 28px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        @media (max-width: 860px) {
+            .grid-3, .grid-2 { grid-template-columns: 1fr; }
+            .hero, .section { padding: 22px 16px; }
+        }
+    </style>
+</head>
+<body>
+<section class="oe_container">
+<div class="wrap">
+
+    <div class="hero">
+        <div class="eyebrow">Free · Odoo 19 · LGPL-3</div>
+        <h1>Quick Sticky Notes</h1>
+        <p>
+            Keep important reminders visible on any Odoo record form.
+            Colorful sticky notes that stay private or shared — without cluttering Chatter.
+        </p>
+        <div class="badges">
+            <span class="badge">Form-side sticky panel</span>
+            <span class="badge">Private &amp; shared notes</span>
+            <span class="badge">Pin · colors · author tracking</span>
+            <span class="badge">Enable per model in Settings</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>See it on a real Contact form</h2>
+        <p class="lead">
+            Open an enabled record and the sticky panel appears beside the form.
+            Add multiple notes, pin the important ones, and keep personal follow-ups private.
+        </p>
+        <img class="shot" src="main_screenshot.png" alt="Quick Sticky Notes panel on an Odoo Contact form"/>
+        <p class="caption">Live screenshot — Contact form with pinned, shared, and private sticky notes</p>
+    </div>
+
+    <div class="section">
+        <h2>Why teams love it</h2>
+        <div class="grid-3">
+            <div class="card">
+                <h3>On the record, not buried</h3>
+                <p>
+                    Notes stay visible while you work the form — perfect for call-backs,
+                    billing terms, and internal tips.
+                </p>
+            </div>
+            <div class="card">
+                <h3>Private or shared</h3>
+                <p>
+                    Keep personal reminders locked to you, or share notes with colleagues
+                    who can open the same document.
+                </p>
+            </div>
+            <div class="card">
+                <h3>Color + pin for priority</h3>
+                <p>
+                    Use
+                    <span class="note-dot" style="background:#f6d86b"></span>Yellow
+                    <span class="note-dot" style="background:#74c69d"></span>Green
+                    <span class="note-dot" style="background:#4ea8de"></span>Blue
+                    <span class="note-dot" style="background:#f4a261"></span>Orange
+                    <span class="note-dot" style="background:#f72585"></span>Pink
+                    and pin critical notes to the top.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Colorful notes with clear ownership</h2>
+        <p class="lead">
+            Each note shows author, last update, visibility, and pin status.
+            Only the author can edit or delete their note.
+        </p>
+        <img class="shot" src="screenshot_colors.png" alt="Close-up of colorful sticky notes with pin and privacy icons"/>
+        <p class="caption">Live screenshot — sticky panel detail with colors, pins, and private/shared icons</p>
+    </div>
+
+    <div class="section">
+        <div class="grid-2">
+            <div>
+                <h2>Configure in Settings</h2>
+                <p class="lead">
+                    Choose exactly which models show the panel.
+                    Contacts are enabled after install — add Sales, CRM, Projects, or any other model anytime.
+                </p>
+                <ul class="list">
+                    <li>Open <strong>Settings → General Settings</strong></li>
+                    <li>Find the <strong>Quick Sticky Notes</strong> block</li>
+                    <li>Select enabled models and Save</li>
+                    <li>The panel appears on those form views only</li>
+                </ul>
+            </div>
+            <div>
+                <img class="shot" src="screenshot_settings.png" alt="Settings page enabling sticky notes on Contacts"/>
+                <p class="caption">Live screenshot — enabled models configuration</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="grid-2">
+            <div>
+                <img class="shot" src="screenshot_mynotes.png" alt="My Notes list overview in Sticky Notes app"/>
+                <p class="caption">Live screenshot — My Notes overview with filters and colors</p>
+            </div>
+            <div>
+                <h2>My Notes &amp; All Notes</h2>
+                <p class="lead">
+                    Review everything in one place, then jump back to the related record in one click.
+                </p>
+                <ul class="list">
+                    <li><strong>My Notes</strong> — notes you authored</li>
+                    <li><strong>All Notes</strong> — your notes + shared notes you can see</li>
+                    <li>Filter by pinned, private/shared, author, or model</li>
+                    <li>Open the related Contact / document instantly</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>How to use (2 minutes)</h2>
+        <ol class="steps">
+            <li>
+                <strong>Install Quick Sticky Notes</strong><br/>
+                Update the Apps list and install the free app.
+            </li>
+            <li>
+                <strong>Enable models</strong><br/>
+                Settings → General Settings → Quick Sticky Notes → select models (Contacts is enabled by default).
+            </li>
+            <li>
+                <strong>Open a saved record</strong><br/>
+                Example: Contacts → open a company/person form (must be saved first).
+            </li>
+            <li>
+                <strong>Add a sticky note</strong><br/>
+                Use the Sticky Notes panel → <strong>+</strong> → write note → choose color / private-shared / pin → Save.
+            </li>
+        </ol>
+        <p class="lead" style="margin-top:16px;margin-bottom:0;">
+            Tip: create notes from the record panel. The My Notes menu is for reviewing existing notes.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>Complete feature list</h2>
+        <div class="feature-row"><div class="check">✓</div><div>OWL sticky notes panel on enabled record forms (Odoo 19)</div></div>
+        <div class="feature-row"><div class="check">✓</div><div>Multiple notes per record with title + body</div></div>
+        <div class="feature-row"><div class="check">✓</div><div>Five colors: yellow, green, blue, orange, pink</div></div>
+        <div class="feature-row"><div class="check">✓</div><div>Pin / unpin important notes</div></div>
+        <div class="feature-row"><div class="check">✓</div><div>Private vs shared visibility with record rules</div></div>
+        <div class="feature-row"><div class="check">✓</div><div>Author and last-updated tracking</div></div>
+        <div class="feature-row"><div class="check">✓</div><div>Collapsible panel to save screen space</div></div>
+        <div class="feature-row"><div class="check">✓</div><div>My Notes / All Notes menus + Open Record action</div></div>
+        <div class="feature-row"><div class="check">✓</div><div>Settings to enable/disable models</div></div>
+        <div class="feature-row"><div class="check">✓</div><div>Automated tests included</div></div>
+    </div>
+
+    <div class="section">
+        <h2>Technical details</h2>
+        <p class="lead">Designed clean for production and the Odoo Apps Store.</p>
+        <div class="tech">
+            <span>Odoo 19.0</span>
+            <span>Depends: base, base_setup, web</span>
+            <span>License: LGPL-3</span>
+            <span>Application module</span>
+            <span>No login/auth customization</span>
+            <span>Does not replace Chatter</span>
+        </div>
+        <ul class="list" style="margin-top:18px;">
+            <li>Backend models: <code>quick.sticky.note</code>, <code>quick.sticky.note.model</code></li>
+            <li>Frontend: OWL component patched into <code>web.FormView</code></li>
+            <li>Security: ACL + ir.rule for private/shared access</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Support &amp; roadmap</h2>
+        <p class="lead">
+            This app is published free for the Odoo community.
+            Need help or have a feature request? Contact the author from the Apps Store page.
+        </p>
+        <ul class="list">
+            <li>Planned free updates: reminders, @mentions, and copy-to-Chatter</li>
+            <li>Compatible with Community and Enterprise backends that use standard web form views</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+        Quick Sticky Notes · Free productivity app for Odoo 19 · LGPL-3
+    </div>
+
+</div>
+</section>
+</body>
+</html>

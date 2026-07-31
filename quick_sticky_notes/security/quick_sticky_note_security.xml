@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Read: own private notes OR any shared notes -->
+    <record id="quick_sticky_note_rule_user_read" model="ir.rule">
+        <field name="name">Quick Sticky Notes: read own private or shared</field>
+        <field name="model_id" ref="model_quick_sticky_note"/>
+        <field name="domain_force">['|', ('visibility', '=', 'shared'), ('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Create / write / unlink: only own notes -->
+    <record id="quick_sticky_note_rule_user_own" model="ir.rule">
+        <field name="name">Quick Sticky Notes: manage own notes</field>
+        <field name="model_id" ref="model_quick_sticky_note"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="perm_read" eval="False"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- System admins: full access -->
+    <record id="quick_sticky_note_rule_system" model="ir.rule">
+        <field name="name">Quick Sticky Notes: system full access</field>
+        <field name="model_id" ref="model_quick_sticky_note"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+</odoo>

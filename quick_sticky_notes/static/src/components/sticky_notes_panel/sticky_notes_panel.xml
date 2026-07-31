@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="quick_sticky_notes.StickyNotesPanel">
+        <div t-if="canShow" class="o_quick_sticky_notes_panel" t-att-class="{ 'o_qsn_collapsed': state.collapsed }">
+            <div class="o_qsn_header">
+                <button type="button" class="btn btn-link o_qsn_toggle" t-on-click="toggleCollapsed" t-att-title="state.collapsed ? 'Expand sticky notes' : 'Collapse sticky notes'">
+                    <i t-att-class="state.collapsed ? 'fa fa-chevron-left' : 'fa fa-chevron-right'"/>
+                </button>
+                <div class="o_qsn_title">
+                    <i class="fa fa-sticky-note me-1"/>
+                    <span>Sticky Notes</span>
+                    <span t-if="noteCount" class="badge rounded-pill text-bg-secondary ms-1" t-esc="noteCount"/>
+                </div>
+                <button type="button" class="btn btn-sm btn-primary o_qsn_add" t-on-click="openCreate" title="Add sticky note">
+                    <i class="fa fa-plus"/>
+                </button>
+            </div>
+
+            <div t-if="!state.collapsed" class="o_qsn_body">
+                <div t-if="state.loading" class="o_qsn_loading text-muted">
+                    Loading…
+                </div>
+
+                <div t-if="state.showForm" class="o_qsn_form card border-0 shadow-sm mb-2">
+                    <div class="card-body p-2">
+                        <input type="text"
+                               class="form-control form-control-sm mb-2"
+                               placeholder="Title (optional)"
+                               t-model="state.draft.name"/>
+                        <textarea class="form-control form-control-sm mb-2"
+                                  rows="3"
+                                  placeholder="Write your sticky note…"
+                                  t-model="state.draft.body"/>
+                        <div class="d-flex flex-wrap gap-2 mb-2 align-items-center">
+                            <label class="small mb-0 text-muted">Color</label>
+                            <t t-foreach="state.colors" t-as="color" t-key="color[0]">
+                                <button type="button"
+                                        class="o_qsn_color_dot"
+                                        t-att-class="{
+                                            'o_qsn_color_active': state.draft.color === color[0],
+                                            ['o_qsn_color_' + color[0]]: true,
+                                        }"
+                                        t-att-title="color[1]"
+                                        t-on-click="() => state.draft.color = color[0]"/>
+                            </t>
+                        </div>
+                        <div class="d-flex flex-wrap gap-3 mb-2">
+                            <div class="form-check form-check-inline m-0">
+                                <input class="form-check-input" type="checkbox" id="o_qsn_pinned" t-model="state.draft.is_pinned"/>
+                                <label class="form-check-label small" for="o_qsn_pinned">Pinned</label>
+                            </div>
+                            <div class="form-check form-check-inline m-0">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="o_qsn_visibility"
+                                       id="o_qsn_private"
+                                       value="private"
+                                       t-model="state.draft.visibility"/>
+                                <label class="form-check-label small" for="o_qsn_private">Private</label>
+                            </div>
+                            <div class="form-check form-check-inline m-0">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="o_qsn_visibility"
+                                       id="o_qsn_shared"
+                                       value="shared"
+                                       t-model="state.draft.visibility"/>
+                                <label class="form-check-label small" for="o_qsn_shared">Shared</label>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-1 justify-content-end">
+                            <button type="button" class="btn btn-sm btn-secondary" t-on-click="cancelForm">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-primary" t-on-click="saveNote">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div t-if="!state.loading and !state.notes.length and !state.showForm" class="o_qsn_empty text-muted">
+                    No sticky notes yet. Click + to add one.
+                </div>
+
+                <t t-foreach="state.notes" t-as="note" t-key="note.id">
+                    <div class="o_qsn_note" t-att-class="'o_qsn_color_' + note.color">
+                        <div class="o_qsn_note_top">
+                            <div class="o_qsn_note_meta">
+                                <i t-if="note.is_pinned" class="fa fa-thumb-tack me-1" title="Pinned"/>
+                                <i t-att-class="note.visibility === 'private' ? 'fa fa-lock me-1' : 'fa fa-users me-1'"
+                                   t-att-title="note.visibility === 'private' ? 'Private' : 'Shared'"/>
+                                <strong t-if="note.name" t-esc="note.name"/>
+                            </div>
+                            <div class="o_qsn_note_actions">
+                                <button t-if="note.is_author" type="button" class="btn btn-link btn-sm p-0 me-1" title="Pin / Unpin" t-on-click="() => this.togglePin(note)">
+                                    <i class="fa fa-thumb-tack"/>
+                                </button>
+                                <button t-if="note.is_author" type="button" class="btn btn-link btn-sm p-0 me-1" title="Edit" t-on-click="() => this.openEdit(note)">
+                                    <i class="fa fa-pencil"/>
+                                </button>
+                                <button t-if="note.is_author" type="button" class="btn btn-link btn-sm p-0 text-danger" title="Delete" t-on-click="() => this.deleteNote(note)">
+                                    <i class="fa fa-trash"/>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="o_qsn_note_body" t-esc="note.body"/>
+                        <div class="o_qsn_note_footer text-muted">
+                            <span t-esc="note.user_name"/>
+                            <span t-if="note.write_date"> · <t t-esc="formatDate(note.write_date)"/></span>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

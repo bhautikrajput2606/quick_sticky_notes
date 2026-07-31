@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_quick_sticky_note_list" model="ir.ui.view">
+        <field name="name">quick.sticky.note.list</field>
+        <field name="model">quick.sticky.note</field>
+        <field name="arch" type="xml">
+            <list string="Sticky Notes" multi_edit="1">
+                <field name="is_pinned" string="Pinned"/>
+                <field name="name"/>
+                <field name="body"/>
+                <field name="color" widget="badge"/>
+                <field name="visibility" widget="badge"/>
+                <field name="res_name" string="Record"/>
+                <field name="res_model" optional="hide"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="write_date" string="Updated"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_quick_sticky_note_form" model="ir.ui.view">
+        <field name="name">quick.sticky.note.form</field>
+        <field name="model">quick.sticky.note</field>
+        <field name="arch" type="xml">
+            <form string="Sticky Note">
+                <header>
+                    <button name="action_open_related_record" type="object" string="Open Record" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Note title (optional)"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="color" widget="radio" options="{'horizontal': true}"/>
+                            <field name="visibility" widget="radio" options="{'horizontal': true}"/>
+                            <field name="is_pinned"/>
+                        </group>
+                        <group>
+                            <field name="user_id" readonly="1"/>
+                            <field name="res_model" readonly="1"/>
+                            <field name="res_id" readonly="1"/>
+                            <field name="res_name" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="write_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Note">
+                        <field name="body" nolabel="1" placeholder="Write your sticky note…"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_quick_sticky_note_search" model="ir.ui.view">
+        <field name="name">quick.sticky.note.search</field>
+        <field name="model">quick.sticky.note</field>
+        <field name="arch" type="xml">
+            <search string="Sticky Notes">
+                <field name="name"/>
+                <field name="body"/>
+                <field name="res_name"/>
+                <field name="user_id"/>
+                <field name="res_model"/>
+                <filter string="My Notes" name="my_notes" domain="[('user_id', '=', uid)]"/>
+                <filter string="Pinned" name="pinned" domain="[('is_pinned', '=', True)]"/>
+                <filter string="Private" name="private" domain="[('visibility', '=', 'private')]"/>
+                <filter string="Shared" name="shared" domain="[('visibility', '=', 'shared')]"/>
+                <separator/>
+                <filter string="Updated" name="filter_write_date" date="write_date"/>
+                <group>
+                    <filter string="Author" name="group_user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Color" name="group_color" context="{'group_by': 'color'}"/>
+                    <filter string="Visibility" name="group_visibility" context="{'group_by': 'visibility'}"/>
+                    <filter string="Model" name="group_model" context="{'group_by': 'res_model'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_quick_sticky_note_my" model="ir.actions.act_window">
+        <field name="name">My Notes</field>
+        <field name="res_model">quick.sticky.note</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_my_notes': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No sticky notes yet
+            </p>
+            <p>
+                Open any enabled record form and use the sticky notes panel to create your first note.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_quick_sticky_note_all" model="ir.actions.act_window">
+        <field name="name">All Notes</field>
+        <field name="res_model">quick.sticky.note</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No sticky notes found
+            </p>
+            <p>
+                Shared notes from your team and your own notes will appear here.
+            </p>
+        </field>
+    </record>
+</odoo>

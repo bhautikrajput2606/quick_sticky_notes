@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_quick_sticky_notes" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.quick.sticky.notes</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='general_settings']" position="inside">
+                <block title="Quick Sticky Notes" name="quick_sticky_notes_block" groups="base.group_system">
+                    <setting string="Enabled Models" help="Choose which document types show the Quick Sticky Notes panel on their form view. Contacts are enabled by default after installation.">
+                        <div class="content-group">
+                            <div class="mt16">
+                                <field name="quick_sticky_note_model_ids" widget="many2many_tags" options="{'no_create': True}" class="o_light_label"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_quick_sticky_notes_root"
+              name="Sticky Notes"
+              web_icon="quick_sticky_notes,static/description/icon.png"
+              sequence="85"
+              groups="base.group_user"/>
+
+    <menuitem id="menu_quick_sticky_notes_my"
+              name="My Notes"
+              parent="menu_quick_sticky_notes_root"
+              action="action_quick_sticky_note_my"
+              sequence="10"/>
+
+    <menuitem id="menu_quick_sticky_notes_all"
+              name="All Notes"
+              parent="menu_quick_sticky_notes_root"
+              action="action_quick_sticky_note_all"
+              sequence="20"/>
+
+    <menuitem id="menu_quick_sticky_notes_settings"
+              name="Configuration"
+              parent="menu_quick_sticky_notes_root"
+              action="base_setup.action_general_configuration"
+              sequence="90"
+              groups="base.group_system"/>
+</odoo>

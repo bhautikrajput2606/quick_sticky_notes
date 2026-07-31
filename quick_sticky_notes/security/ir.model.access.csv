@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_quick_sticky_note_user,quick.sticky.note.user,model_quick_sticky_note,base.group_user,1,1,1,1
+access_quick_sticky_note_system,quick.sticky.note.system,model_quick_sticky_note,base.group_system,1,1,1,1
+access_quick_sticky_note_model_user,quick.sticky.note.model.user,model_quick_sticky_note_model,base.group_user,1,0,0,0
+access_quick_sticky_note_model_manager,quick.sticky.note.model.manager,model_quick_sticky_note_model,base.group_system,1,1,1,1
