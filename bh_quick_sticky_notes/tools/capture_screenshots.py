@@ -151,7 +151,7 @@ def main() -> int:
                 print("menu navigation failed:", exc)
             if not opened:
                 page.goto(
-                    f"{BASE}/web#action=quick_sticky_notes.action_quick_sticky_note_my&model=quick.sticky.note&view_type=list",
+                    f"{BASE}/web#action=bh_quick_sticky_notes.action_quick_sticky_note_my&model=quick.sticky.note&view_type=list",
                     wait_until="domcontentloaded",
                     timeout=60000,
                 )

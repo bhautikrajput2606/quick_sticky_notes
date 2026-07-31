@@ -6,7 +6,7 @@ import { _t } from "@web/core/l10n/translation";
 import { formatDateTime, deserializeDateTime } from "@web/core/l10n/dates";
 
 export class StickyNotesPanel extends Component {
-    static template = "quick_sticky_notes.StickyNotesPanel";
+    static template = "bh_quick_sticky_notes.StickyNotesPanel";
     static props = {
         resModel: String,
         resId: { type: Number, optional: true },

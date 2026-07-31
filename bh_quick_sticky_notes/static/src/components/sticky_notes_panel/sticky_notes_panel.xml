@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
-    <t t-name="quick_sticky_notes.StickyNotesPanel">
+    <t t-name="bh_quick_sticky_notes.StickyNotesPanel">
         <div t-if="canShow" class="o_quick_sticky_notes_panel" t-att-class="{ 'o_qsn_collapsed': state.collapsed }">
             <div class="o_qsn_header">
                 <button type="button" class="btn btn-link o_qsn_toggle" t-on-click="toggleCollapsed" t-att-title="state.collapsed ? 'Expand sticky notes' : 'Collapse sticky notes'">

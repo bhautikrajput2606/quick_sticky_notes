@@ -17,7 +17,7 @@ Features
 Installation
 ------------
 
-1. Copy ``quick_sticky_notes`` into your Odoo addons path.
+1. Copy ``bh_quick_sticky_notes`` into your Odoo addons path.
 2. Update the Apps list and install **Quick Sticky Notes**.
 3. Open **Settings → General Settings → Quick Sticky Notes** and enable models
    (Contacts / ``res.partner`` is enabled by default).
@@ -35,4 +35,4 @@ Tests
 
 Run::
 
-    odoo-bin -d YOUR_DB -i quick_sticky_notes --test-enable --stop-after-init
+    odoo-bin -d YOUR_DB -i bh_quick_sticky_notes --test-enable --stop-after-init

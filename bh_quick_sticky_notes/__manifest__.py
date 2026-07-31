@@ -22,7 +22,7 @@ Features
 Designed for Odoo 19 and the Odoo Apps Store (free / LGPL-3).
     """,
     'author': 'Bhautik',
-    'website': 'https://apps.odoo.com/apps/modules/19.0/quick_sticky_notes/',
+    'website': 'https://apps.odoo.com/apps/modules/19.0/bh_quick_sticky_notes/',
     'license': 'LGPL-3',
     'depends': [
         'base',
@@ -38,11 +38,11 @@ Designed for Odoo 19 and the Odoo Apps Store (free / LGPL-3).
     ],
     'assets': {
         'web.assets_backend': [
-            'quick_sticky_notes/static/src/components/sticky_notes_panel/sticky_notes_panel.scss',
-            'quick_sticky_notes/static/src/components/sticky_notes_panel/sticky_notes_panel.xml',
-            'quick_sticky_notes/static/src/components/sticky_notes_panel/sticky_notes_panel.js',
-            'quick_sticky_notes/static/src/js/form_view_patch.js',
-            'quick_sticky_notes/static/src/js/form_view_patch.xml',
+            'bh_quick_sticky_notes/static/src/components/sticky_notes_panel/sticky_notes_panel.scss',
+            'bh_quick_sticky_notes/static/src/components/sticky_notes_panel/sticky_notes_panel.xml',
+            'bh_quick_sticky_notes/static/src/components/sticky_notes_panel/sticky_notes_panel.js',
+            'bh_quick_sticky_notes/static/src/js/form_view_patch.js',
+            'bh_quick_sticky_notes/static/src/js/form_view_patch.xml',
         ],
     },
     'images': [

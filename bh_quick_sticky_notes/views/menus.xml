@@ -2,7 +2,7 @@
 <odoo>
     <menuitem id="menu_quick_sticky_notes_root"
               name="Sticky Notes"
-              web_icon="quick_sticky_notes,static/description/icon.png"
+              web_icon="bh_quick_sticky_notes,static/description/icon.png"
               sequence="85"
               groups="base.group_user"/>
 
