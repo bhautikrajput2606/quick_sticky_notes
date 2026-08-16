@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Quick Sticky Notes',
-    'version': '19.0.1.2.0',
+    'version': '17.0.1.2.0',
     'category': 'Productivity',
     'summary': 'Sticky notes on any Odoo record — private or shared, colorful and pinned',
     'description': """
@@ -19,10 +19,10 @@ Features
 * My Notes menu for a global overview
 * Secure record rules for private notes
 
-Designed for Odoo 19 and the Odoo Apps Store (free / LGPL-3).
+Designed for Odoo 17 and the Odoo Apps Store (free / LGPL-3).
     """,
     'author': 'Bhautik',
-    'website': 'https://apps.odoo.com/apps/modules/19.0/bh_quick_sticky_notes/',
+    'website': 'https://apps.odoo.com/apps/modules/17.0/bh_quick_sticky_notes/',
     'license': 'LGPL-3',
     'depends': [
         'base',
