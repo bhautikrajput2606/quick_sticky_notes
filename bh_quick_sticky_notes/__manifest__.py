@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Quick Sticky Notes',
-    'version': '19.0.1.2.0',
+    'version': '19.0.1.2.1',
     'category': 'Productivity',
     'summary': 'Sticky notes on any Odoo record — private or shared, colorful and pinned',
     'description': """
@@ -21,9 +21,11 @@ Features
 
 Designed for Odoo 19 and the Odoo Apps Store (free / LGPL-3).
     """,
-    'author': 'Bhautik',
-    'website': 'https://apps.odoo.com/apps/modules/19.0/bh_quick_sticky_notes/',
-    'license': 'LGPL-3',
+    'author': 'Bhautik Rajput',
+    'website': 'https://apps.odoo.com/apps/',
+    'license': 'OPL-1',
+    'price': 9.99,
+    'currency': 'USD',
     'depends': [
         'base',
         'base_setup',
